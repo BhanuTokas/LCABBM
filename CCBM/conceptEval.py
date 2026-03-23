@@ -10,6 +10,7 @@ from transformers import (
 )
 from diffusers import DiffusionPipeline
 
+
 def enable_memory_savings(pipe):
     # attempt common memory reductions
     try:
@@ -164,8 +165,11 @@ class DiffusionInterface:
             try:
                 # import locally to avoid requiring it when not used
                 from diffusers import DDIMScheduler
+
                 # construct a DDIM scheduler using the existing scheduler's config
-                self.pipe.scheduler = DDIMScheduler.from_config(self.pipe.scheduler.config)
+                self.pipe.scheduler = DDIMScheduler.from_config(
+                    self.pipe.scheduler.config
+                )
             except Exception as e:
                 # if DDIM isn't available or replacement fails, raise informative error
                 raise RuntimeError(f"Failed to set DDIM scheduler: {e}")
@@ -196,7 +200,7 @@ class DiffusionInterface:
         images = out.images if hasattr(out, "images") else out
         img = images[0] if isinstance(images, (list, tuple)) else images
         return img
-    
+
     def ddim_invert(self, pil_image: Image, num_inference_steps=50):
         """
         Perform DDIM inversion: image -> latents (via VAE) -> invert the deterministic DDIM sampling
@@ -218,7 +222,11 @@ class DiffusionInterface:
         for i, t in enumerate(tqdm(list(timesteps))):
             # For DDIM forward update we need alpha cumprod info on scheduler
             alpha_prod_t = scheduler.alphas_cumprod[t]
-            alpha_prod_prev = scheduler.alphas_cumprod[t] if i == len(timesteps)-1 else scheduler.alphas_cumprod[timesteps[i+1]]
+            alpha_prod_prev = (
+                scheduler.alphas_cumprod[t]
+                if i == len(timesteps) - 1
+                else scheduler.alphas_cumprod[timesteps[i + 1]]
+            )
             # Convert scalars to tensors
             a_t = torch.tensor(alpha_prod_t, device=self.device, dtype=self.dtype)
             a_prev = torch.tensor(alpha_prod_prev, device=self.device, dtype=self.dtype)
@@ -226,10 +234,14 @@ class DiffusionInterface:
             # For forward DDIM step we need the noise epsilon_t that would produce x_t from x0. However computing a robust forward mapping is subtle.
             # Simpler approach: use scheduler.add_noise to simulate adding noise at a given timestep from a fixed random noise.
             # We'll create a deterministic pseudo-random noise for each step using generator seeded by self.seed
-            noise = torch.randn_like(x_t, generator=torch.Generator(device=self.device).manual_seed(self.seed))
+            noise = torch.randn_like(
+                x_t,
+                generator=torch.Generator(device=self.device).manual_seed(self.seed),
+            )
             x_t = scheduler.add_noise(x0, noise, t)
         z_T = x_t
         return z_T, timesteps
+
 
 class ConceptDrifter:
 
@@ -249,7 +261,15 @@ class ConceptDrifter:
         self.device = device
         self.clip_interface = CLIPInterface(clip_model, dtype, device)
         self.diff_interface = DiffusionInterface(
-            model_id, dtype, device, seed, height, width, latent_scale, use_ddim, ddim_eta
+            model_id,
+            dtype,
+            device,
+            seed,
+            height,
+            width,
+            latent_scale,
+            use_ddim,
+            ddim_eta,
         )
 
     def getConceptVector(self, positive_text: str, negative_text: str):
@@ -260,7 +280,7 @@ class ConceptDrifter:
         neg = embeddings[1:2]
         magnitude = (pos.norm(dim=1) + neg.norm(dim=1)) / 2
         return (pos - neg), magnitude
-    
+
     def getProbs(self, z_i, z_pos, z_neg):
         prob_p = torch.nn.functional.cosine_similarity(z_i, z_pos)
         prob_n = torch.nn.functional.cosine_similarity(z_i, z_neg)
@@ -270,21 +290,22 @@ class ConceptDrifter:
     def perturbImagePoints(self, img, z_pos, z_neg, delta=0.1):
         z_i = self.clip_interface.getImgEmbedding(img)
         z_i_mag = z_i.norm(dim=1)
-        vector = z_pos-z_neg
+        vector = z_pos - z_neg
         magnitude = (z_pos.norm(dim=1) + z_neg.norm(dim=1)) / 2
-        probs = self.getProbs(z_i, z_pos, z_neg)            
-        if(probs[0]>probs[1]):
+        probs = self.getProbs(z_i, z_pos, z_neg)
+        if probs[0] > probs[1]:
             vector = -1 * vector
         z_new = z_i + (delta * vector * (z_i_mag / magnitude))
         z_i = z_i.to(self.device)
         z_new = z_new.to(self.device)
         orig_img = self.diff_interface.genImage(z_i)
         new_img = self.diff_interface.genImage(z_new)
-        if(probs[0]>probs[1]):
+        if probs[0] > probs[1]:
             return new_img, orig_img
         else:
             return orig_img, new_img
-    '''        
+
+    """        
     def perturbImageVector(self, img, vector, magnitude, delta=0.1):
         # More efficient to use if same concept needs to be applied to multiple images.
         z_i = self.clip_interface.getImgEmbedding(img)
@@ -299,7 +320,7 @@ class ConceptDrifter:
         vector, mag = self.getConceptVector(positive_text, negative_text)
         orig_img, new_img = self.perturbImageVector(img, vector, mag, delta)
         return orig_img, new_img
-    '''
+    """
 
 
 if __name__ == "__main__":
@@ -308,9 +329,7 @@ if __name__ == "__main__":
     image = Image.open("samples/test_img2.jpg")
     text_positive = "yellow"
     text_negative = "blue"
-    embeddings = c.clip_interface.getTextEmbedding(
-        [text_positive, text_negative]
-    )
+    embeddings = c.clip_interface.getTextEmbedding([text_positive, text_negative])
     z_pos = embeddings[0:1]
     z_neg = embeddings[1:2]
     img1, img2 = c.perturbImagePoints(image, z_pos, z_neg, delta=0.2)
