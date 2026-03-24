@@ -11,6 +11,7 @@ from transformers import (
 )
 from diffusers import DiffusionPipeline
 
+
 def enable_memory_savings(pipe):
     # attempt common memory reductions
     try:
@@ -93,7 +94,9 @@ class CLIPInterface:
 
     def getImgEmbedding(self, img: Image):
         # CLIP processor is usually callable; wrap defensively
-        clip_inputs = self.clip_processor(images=img, return_tensors="pt").to(self.device)
+        clip_inputs = self.clip_processor(images=img, return_tensors="pt").to(
+            self.device
+        )
         with torch.no_grad():
             clip_out = self.clip_image_encoder(**clip_inputs)
             if hasattr(clip_out, "image_embeds"):
@@ -164,8 +167,11 @@ class DiffusionInterface:
             try:
                 # import locally to avoid requiring it when not used
                 from diffusers import DDIMScheduler
+
                 # construct a DDIM scheduler using the existing scheduler's config
-                self.pipe.scheduler = DDIMScheduler.from_config(self.pipe.scheduler.config)
+                self.pipe.scheduler = DDIMScheduler.from_config(
+                    self.pipe.scheduler.config
+                )
             except Exception as e:
                 # if DDIM isn't available or replacement fails, raise informative error
                 raise RuntimeError(f"Failed to set DDIM scheduler: {e}")
@@ -200,7 +206,9 @@ class DiffusionInterface:
     # ----- New helpers for encoding/decoding and DDIM inversion -----
     def pil_to_tensor(self, pil_image: Image, height: int, width: int, device, dtype):
         """Convert PIL image -> normalized tensor (1,3,H,W) suitable for VAE.encode."""
-        pil_rgb = pil_image.convert("RGB").resize((width, height), resample=Image.BICUBIC)
+        pil_rgb = pil_image.convert("RGB").resize(
+            (width, height), resample=Image.BICUBIC
+        )
         arr = np.asarray(pil_rgb).astype(np.float32) / 255.0  # [0,1]
         # common diffusers VAE expects [-1,1]
         arr = (arr - 0.5) / 0.5
@@ -221,7 +229,9 @@ class DiffusionInterface:
         img_tensor = None
         if proc is not None and hasattr(proc, "preprocess"):
             try:
-                result = proc.preprocess(pil_image, height=self.height, width=self.width)
+                result = proc.preprocess(
+                    pil_image, height=self.height, width=self.width
+                )
                 if isinstance(result, torch.Tensor):
                     img_tensor = result.to(device=device, dtype=dtype)
             except Exception:
@@ -229,7 +239,9 @@ class DiffusionInterface:
 
         # 2) fallback manual conversion
         if img_tensor is None:
-            img_tensor = self.pil_to_tensor(pil_image, self.height, self.width, device, dtype)
+            img_tensor = self.pil_to_tensor(
+                pil_image, self.height, self.width, device, dtype
+            )
 
         # 3) encode with VAE — use mode() (mean) not sample() for deterministic inversion
         with torch.no_grad():
@@ -313,7 +325,7 @@ class DiffusionInterface:
         inversion_timesteps = list(reversed(timesteps.tolist()))
 
         for i in tqdm(range(len(inversion_timesteps) - 1)):
-            t      = inversion_timesteps[i]
+            t = inversion_timesteps[i]
             t_next = inversion_timesteps[i + 1]
             t_tensor = torch.tensor(t, device=self.device, dtype=torch.long)
 
@@ -328,8 +340,10 @@ class DiffusionInterface:
                     return_dict=False,
                 )[0]
 
-            alpha_t      = scheduler.alphas_cumprod[t     ].to(self.device, dtype=self.dtype)
-            alpha_t_next = scheduler.alphas_cumprod[t_next].to(self.device, dtype=self.dtype)
+            alpha_t = scheduler.alphas_cumprod[t].to(self.device, dtype=self.dtype)
+            alpha_t_next = scheduler.alphas_cumprod[t_next].to(
+                self.device, dtype=self.dtype
+            )
 
             # Inverse DDIM step: x_{t+1} from x_t and predicted noise
             pred_x0 = (x_t - (1 - alpha_t).sqrt() * noise_pred) / alpha_t.sqrt()
@@ -341,7 +355,15 @@ class DiffusionInterface:
         z_T = x_t / scheduler.init_noise_sigma
         return z_T, timesteps
 
-    def reconstruct_from_zT(self, z_I, z_T, num_inference_steps=50, guidance_scale=1.0, eta=0.0, generator=None):
+    def reconstruct_from_zT(
+        self,
+        z_I,
+        z_T,
+        num_inference_steps=50,
+        guidance_scale=1.0,
+        eta=0.0,
+        generator=None,
+    ):
         """
         Reconstruct (or concept-perturb) an image from:
           z_I : CLIP image embedding (original for reconstruction, perturbed to shift concept)
@@ -374,6 +396,7 @@ class DiffusionInterface:
             arr = (img_tensor * 255).round().to(torch.uint8).permute(1, 2, 0).numpy()
             return Image.fromarray(arr)
         import numpy as _np
+
         if isinstance(img, _np.ndarray):
             return Image.fromarray(img)
         raise RuntimeError(f"Unhandled pipeline output type: {type(img)}")
@@ -397,7 +420,15 @@ class ConceptDrifter:
         self.device = device
         self.clip_interface = CLIPInterface(clip_model, dtype, device)
         self.diff_interface = DiffusionInterface(
-            model_id, dtype, device, seed, height, width, latent_scale, use_ddim, ddim_eta
+            model_id,
+            dtype,
+            device,
+            seed,
+            height,
+            width,
+            latent_scale,
+            use_ddim,
+            ddim_eta,
         )
 
     def getConceptVector(self, positive_text: str, negative_text: str):
@@ -408,7 +439,7 @@ class ConceptDrifter:
         neg = embeddings[1:2]
         magnitude = (pos.norm(dim=1) + neg.norm(dim=1)) / 2
         return (pos - neg), magnitude
-    
+
     def getProbs(self, z_i, z_pos, z_neg):
         prob_p = torch.nn.functional.cosine_similarity(z_i, z_pos)
         prob_n = torch.nn.functional.cosine_similarity(z_i, z_neg)
@@ -428,13 +459,14 @@ class ConceptDrifter:
         z_new = z_new.to(self.device)
         # Invert with z_i to find the latent that reproduces this image
         z_T, _ = self.diff_interface.ddim_invert(img, z_i)
-        orig_img = self.diff_interface.reconstruct_from_zT(z_i,  z_T)
-        new_img  = self.diff_interface.reconstruct_from_zT(z_new, z_T)
+        orig_img = self.diff_interface.reconstruct_from_zT(z_i, z_T)
+        new_img = self.diff_interface.reconstruct_from_zT(z_new, z_T)
         if probs[0] > probs[1]:
             return new_img, orig_img
         else:
             return orig_img, new_img
-    '''        
+
+    """        
     def perturbImageVector(self, img, vector, magnitude, delta=0.1):
         # More efficient to use if same concept needs to be applied to multiple images.
         z_i = self.clip_interface.getImgEmbedding(img)
@@ -449,27 +481,29 @@ class ConceptDrifter:
         vector, mag = self.getConceptVector(positive_text, negative_text)
         orig_img, new_img = self.perturbImageVector(img, vector, mag, delta)
         return orig_img, new_img
-    '''
+    """
 
 
 if __name__ == "__main__":
     # Example: enable DDIM with deterministic sampling (eta=0.0)
     c = ConceptDrifter(use_ddim=True)
-    image = Image.open("samples/test_img.jpg").resize((512,512))
+    image = Image.open("samples/test_img.jpg").resize((512, 512))
     text_positive = "yellow"
     text_negative = "blue"
-    embeddings = c.clip_interface.getTextEmbedding(
-        [text_positive, text_negative]
-    )
+    embeddings = c.clip_interface.getTextEmbedding([text_positive, text_negative])
     z_pos = embeddings[0:1]
     z_neg = embeddings[1:2]
     # reuse same generator for reconstruction
-    gen = torch.Generator(device=c.diff_interface.device).manual_seed(c.diff_interface.seed)
+    gen = torch.Generator(device=c.diff_interface.device).manual_seed(
+        c.diff_interface.seed
+    )
 
     # Example: invert and reconstruct deterministically
     z_i = c.clip_interface.getImgEmbedding(image)
     zT, timesteps = c.diff_interface.ddim_invert(image, z_i, num_inference_steps=50)
-    recon = c.diff_interface.reconstruct_from_zT(z_i, zT, num_inference_steps=50, guidance_scale=1.0, eta=0.0, generator=gen)
+    recon = c.diff_interface.reconstruct_from_zT(
+        z_i, zT, num_inference_steps=50, guidance_scale=1.0, eta=0.0, generator=gen
+    )
     recon.save("reconstructed_from_zT.png")
 
     img1, img2 = c.perturbImagePoints(image, z_pos, z_neg, delta=0.2)

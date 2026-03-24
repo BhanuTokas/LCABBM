@@ -31,10 +31,10 @@ guidance_scales = [
 NUM_SAMPLES = 25
 OUTPUT_DIR = "outputs/factor_ablation_results/"
 concept_loaders = get_concept_loaders("broden", None, batch_size=1)
-concepts = ["airplane", "greeness", "redness", "bird", "car", "computer", "plant"]
+concepts = ["airplane", "greenness", "redness", "bird", "car", "computer", "plant"]
 concept_antonyms = {
     "airplane": "car",
-    "greeness": "blueness",
+    "greenness": "blueness",
     "redness": "blueness",
     "bird": "fish",
     "car": "airplane",
@@ -60,6 +60,7 @@ for s_factor in scaling_factors:
             num_samples = min(NUM_SAMPLES, len(dataset))
             img_set = torch.utils.data.Subset(dataset, list(range(num_samples)))
             for image in img_set:
+                image = image.resize((512, 512))
                 print(f"Working on {s_factor=} and {g_scale=}")
                 c.diff_interface.pipe.vae.config.scaling_factor = s_factor
                 zT, timesteps = c.diff_interface.ddim_invert(
@@ -103,7 +104,7 @@ for s_factor in scaling_factors:
                     "lpips_distance_orig": lpips_distance_orig,
                     "lpips_distance_perturb": lpips_distance_perturb,
                     "mse_distance_orig": mse_distance_orig,
-                    "mse_distance_perturb": mse_distance_perturb
+                    "mse_distance_perturb": mse_distance_perturb,
                 }
                 results[s_factor][g_scale].append(curr_results)
 

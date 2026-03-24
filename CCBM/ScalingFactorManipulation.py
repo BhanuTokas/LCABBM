@@ -11,6 +11,7 @@ from transformers import (
 )
 from diffusers import DiffusionPipeline
 
+
 def enable_memory_savings(pipe):
     try:
         pipe.enable_attention_slicing()
