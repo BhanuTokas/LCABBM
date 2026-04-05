@@ -1,0 +1,303 @@
+[
+  {
+    "input_dir": "Agro-forestry areas",
+    "output_name": "Agro-forestry areas",
+    "concepts": [
+      { "name": "agro_forestry_vs_urban", "positive": "agro-forestry area", "negative": "urban area" }
+    ]
+  },
+  {
+    "input_dir": "Airports",
+    "output_name": "Airports",
+    "concepts": [
+      { "name": "airport_vs_natural_land", "positive": "airport", "negative": "natural land" }
+    ]
+  },
+  {
+    "input_dir": "Annual crops associated with permanent crops",
+    "output_name": "Annual crops associated with permanent crops",
+    "concepts": [
+      { "name": "annual_crops_vs_forest", "positive": "annual crops", "negative": "forest" }
+    ]
+  },
+  {
+    "input_dir": "Bare rock",
+    "output_name": "Bare rock",
+    "concepts": [
+      { "name": "bare_rock_vs_vegetation", "positive": "bare rock", "negative": "dense vegetation" }
+    ]
+  },
+  {
+    "input_dir": "Beaches, dunes, sands",
+    "output_name": "Beaches, dunes, sands",
+    "concepts": [
+      { "name": "beach_vs_forest", "positive": "beach sand dunes", "negative": "dense forest" }
+    ]
+  },
+  {
+    "input_dir": "Broad-leaved forest",
+    "output_name": "Broad-leaved forest",
+    "concepts": [
+      { "name": "broad_leaved_vs_coniferous", "positive": "broad-leaved forest", "negative": "coniferous forest" }
+    ]
+  },
+  {
+    "input_dir": "Burnt areas",
+    "output_name": "Burnt areas",
+    "concepts": [
+      { "name": "burnt_vs_healthy_vegetation", "positive": "burnt area scorched land", "negative": "healthy green vegetation" }
+    ]
+  },
+  {
+    "input_dir": "Coastal lagoons",
+    "output_name": "Coastal lagoons",
+    "concepts": [
+      { "name": "coastal_lagoon_vs_inland", "positive": "coastal lagoon", "negative": "inland dry land" }
+    ]
+  },
+  {
+    "input_dir": "Complex cultivation patterns",
+    "output_name": "Complex cultivation patterns",
+    "concepts": [
+      { "name": "complex_cultivation_vs_uniform_crop", "positive": "complex mixed cultivation patterns", "negative": "uniform single crop field" }
+    ]
+  },
+  {
+    "input_dir": "Coniferous forest",
+    "output_name": "Coniferous forest",
+    "concepts": [
+      { "name": "coniferous_vs_broad_leaved", "positive": "coniferous forest", "negative": "broad-leaved forest" }
+    ]
+  },
+  {
+    "input_dir": "Construction sites",
+    "output_name": "Construction sites",
+    "concepts": [
+      { "name": "construction_vs_natural", "positive": "construction site", "negative": "natural undisturbed land" }
+    ]
+  },
+  {
+    "input_dir": "Continuous urban fabric",
+    "output_name": "Continuous urban fabric",
+    "concepts": [
+      { "name": "continuous_urban_vs_rural", "positive": "continuous urban fabric dense city", "negative": "rural countryside" }
+    ]
+  },
+  {
+    "input_dir": "Discontinuous urban fabric",
+    "output_name": "Discontinuous urban fabric",
+    "concepts": [
+      { "name": "discontinuous_urban_vs_rural", "positive": "discontinuous urban fabric suburban", "negative": "rural countryside" }
+    ]
+  },
+  {
+    "input_dir": "Dump sites",
+    "output_name": "Dump sites",
+    "concepts": [
+      { "name": "dump_vs_clean_land", "positive": "dump site waste land", "negative": "clean natural land" }
+    ]
+  },
+  {
+    "input_dir": "Estuaries",
+    "output_name": "Estuaries",
+    "concepts": [
+      { "name": "estuary_vs_dry_land", "positive": "estuary river mouth", "negative": "dry inland land" }
+    ]
+  },
+  {
+    "input_dir": "Fruit trees and berry plantations",
+    "output_name": "Fruit trees and berry plantations",
+    "concepts": [
+      { "name": "fruit_trees_vs_forest", "positive": "fruit trees berry plantation orchard", "negative": "wild forest" }
+    ]
+  },
+  {
+    "input_dir": "Green urban areas",
+    "output_name": "Green urban areas",
+    "concepts": [
+      { "name": "green_urban_vs_built_up", "positive": "green urban park area", "negative": "built-up urban area" }
+    ]
+  },
+  {
+    "input_dir": "Industrial or commercial units",
+    "output_name": "Industrial or commercial units",
+    "concepts": [
+      { "name": "industrial_vs_natural", "positive": "industrial commercial units", "negative": "natural land" }
+    ]
+  },
+  {
+    "input_dir": "Inland marshes",
+    "output_name": "Inland marshes",
+    "concepts": [
+      { "name": "inland_marsh_vs_dry_land", "positive": "inland marsh wetland", "negative": "dry land" }
+    ]
+  },
+  {
+    "input_dir": "Intertidal flats",
+    "output_name": "Intertidal flats",
+    "concepts": [
+      { "name": "intertidal_vs_dry_land", "positive": "intertidal flat mudflat", "negative": "dry inland land" }
+    ]
+  },
+  {
+    "input_dir": "Land principally occupied by agriculture, with significant areas of natural vegetation",
+    "output_name": "Land principally occupied by agriculture, with significant areas of natural vegetation",
+    "concepts": [
+      { "name": "mixed_agri_natural_vs_urban", "positive": "agricultural land with natural vegetation", "negative": "urban area" }
+    ]
+  },
+  {
+    "input_dir": "Mineral extraction sites",
+    "output_name": "Mineral extraction sites",
+    "concepts": [
+      { "name": "mineral_extraction_vs_natural", "positive": "mineral extraction site quarry", "negative": "natural undisturbed land" }
+    ]
+  },
+  {
+    "input_dir": "Mixed forest",
+    "output_name": "Mixed forest",
+    "concepts": [
+      { "name": "mixed_forest_vs_open_land", "positive": "mixed forest", "negative": "open agricultural land" }
+    ]
+  },
+  {
+    "input_dir": "Moors and heathland",
+    "output_name": "Moors and heathland",
+    "concepts": [
+      { "name": "moor_vs_forest", "positive": "moors heathland", "negative": "dense forest" }
+    ]
+  },
+  {
+    "input_dir": "Natural grassland",
+    "output_name": "Natural grassland",
+    "concepts": [
+      { "name": "natural_grassland_vs_forest", "positive": "natural grassland", "negative": "dense forest" }
+    ]
+  },
+  {
+    "input_dir": "Non-irrigated arable land",
+    "output_name": "Non-irrigated arable land",
+    "concepts": [
+      { "name": "non_irrigated_vs_irrigated", "positive": "non-irrigated arable land dry field", "negative": "irrigated crop field" }
+    ]
+  },
+  {
+    "input_dir": "Olive groves",
+    "output_name": "Olive groves",
+    "concepts": [
+      { "name": "olive_grove_vs_forest", "positive": "olive grove plantation", "negative": "wild forest" }
+    ]
+  },
+  {
+    "input_dir": "Pastures",
+    "output_name": "Pastures",
+    "concepts": [
+      { "name": "pasture_vs_cropland", "positive": "pasture grazing land", "negative": "arable cropland" }
+    ]
+  },
+  {
+    "input_dir": "Peatbogs",
+    "output_name": "Peatbogs",
+    "concepts": [
+      { "name": "peatbog_vs_dry_land", "positive": "peatbog wetland", "negative": "dry land" }
+    ]
+  },
+  {
+    "input_dir": "Permanently irrigated land",
+    "output_name": "Permanently irrigated land",
+    "concepts": [
+      { "name": "irrigated_vs_non_irrigated", "positive": "permanently irrigated crop field", "negative": "non-irrigated dry arable land" }
+    ]
+  },
+  {
+    "input_dir": "Port areas",
+    "output_name": "Port areas",
+    "concepts": [
+      { "name": "port_vs_natural_coast", "positive": "port harbour area", "negative": "natural coastline" }
+    ]
+  },
+  {
+    "input_dir": "Rice fields",
+    "output_name": "Rice fields",
+    "concepts": [
+      { "name": "rice_field_vs_dry_cropland", "positive": "rice field flooded paddy", "negative": "dry arable cropland" }
+    ]
+  },
+  {
+    "input_dir": "Road and rail networks and associated land",
+    "output_name": "Road and rail networks and associated land",
+    "concepts": [
+      { "name": "road_rail_vs_natural", "positive": "road rail network infrastructure", "negative": "natural land" }
+    ]
+  },
+  {
+    "input_dir": "Salines",
+    "output_name": "Salines",
+    "concepts": [
+      { "name": "saline_vs_freshwater", "positive": "saline salt extraction area", "negative": "freshwater body" }
+    ]
+  },
+  {
+    "input_dir": "Salt marshes",
+    "output_name": "Salt marshes",
+    "concepts": [
+      { "name": "salt_marsh_vs_dry_land", "positive": "salt marsh coastal wetland", "negative": "dry inland land" }
+    ]
+  },
+  {
+    "input_dir": "Sclerophyllous vegetation",
+    "output_name": "Sclerophyllous vegetation",
+    "concepts": [
+      { "name": "sclerophyllous_vs_grassland", "positive": "sclerophyllous shrub vegetation", "negative": "open grassland" }
+    ]
+  },
+  {
+    "input_dir": "Sea and ocean",
+    "output_name": "Sea and ocean",
+    "concepts": [
+      { "name": "sea_vs_land", "positive": "sea ocean open water", "negative": "dry land" }
+    ]
+  },
+  {
+    "input_dir": "Sparsely vegetated areas",
+    "output_name": "Sparsely vegetated areas",
+    "concepts": [
+      { "name": "sparse_vegetation_vs_dense", "positive": "sparsely vegetated area", "negative": "densely vegetated area" }
+    ]
+  },
+  {
+    "input_dir": "Sport and leisure facilities",
+    "output_name": "Sport and leisure facilities",
+    "concepts": [
+      { "name": "sport_leisure_vs_natural", "positive": "sport leisure facility", "negative": "natural land" }
+    ]
+  },
+  {
+    "input_dir": "Transitional woodland or shrub",
+    "output_name": "Transitional woodland or shrub",
+    "concepts": [
+      { "name": "transitional_woodland_vs_open", "positive": "transitional woodland shrub regrowth", "negative": "open grassland" }
+    ]
+  },
+  {
+    "input_dir": "Vineyards",
+    "output_name": "Vineyards",
+    "concepts": [
+      { "name": "vineyard_vs_forest", "positive": "vineyard grape plantation", "negative": "wild forest" }
+    ]
+  },
+  {
+    "input_dir": "Water bodies",
+    "output_name": "Water bodies",
+    "concepts": [
+      { "name": "water_body_vs_land", "positive": "inland water body lake reservoir", "negative": "dry land" }
+    ]
+  },
+  {
+    "input_dir": "Water courses",
+    "output_name": "Water courses",
+    "concepts": [
+      { "name": "water_course_vs_land", "positive": "river stream water course", "negative": "dry land" }
+    ]
+  }
+]

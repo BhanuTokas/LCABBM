@@ -1,0 +1,1185 @@
+[
+  {
+    "input_dir": "air_conditioner/positives",
+    "output_name": "air_conditioner",
+    "concepts": [
+      { "name": "air_conditioner_vs_natural", "positive": "air conditioner", "negative": "natural outdoor environment" }
+    ]
+  },
+  {
+    "input_dir": "airplane/positives",
+    "output_name": "airplane",
+    "concepts": [
+      { "name": "airplane_vs_ground_vehicle", "positive": "airplane aircraft", "negative": "ground vehicle" }
+    ]
+  },
+  {
+    "input_dir": "apron/positives",
+    "output_name": "apron",
+    "concepts": [
+      { "name": "apron_vs_bare_clothing", "positive": "apron kitchen wear", "negative": "bare unclothed" }
+    ]
+  },
+  {
+    "input_dir": "arm/positives",
+    "output_name": "arm",
+    "concepts": [
+      { "name": "arm_vs_leg", "positive": "human arm", "negative": "human leg" }
+    ]
+  },
+  {
+    "input_dir": "armchair/positives",
+    "output_name": "armchair",
+    "concepts": [
+      { "name": "armchair_vs_sofa", "positive": "armchair", "negative": "sofa couch" }
+    ]
+  },
+  {
+    "input_dir": "ashcan/positives",
+    "output_name": "ashcan",
+    "concepts": [
+      { "name": "ashcan_vs_clean_surface", "positive": "ashcan trash bin", "negative": "clean empty surface" }
+    ]
+  },
+  {
+    "input_dir": "awning/positives",
+    "output_name": "awning",
+    "concepts": [
+      { "name": "awning_vs_open_sky", "positive": "awning canopy shelter", "negative": "open sky" }
+    ]
+  },
+  {
+    "input_dir": "back/positives",
+    "output_name": "back",
+    "concepts": [
+      { "name": "back_vs_front", "positive": "human back", "negative": "human front face" }
+    ]
+  },
+  {
+    "input_dir": "back_pillow/positives",
+    "output_name": "back_pillow",
+    "concepts": [
+      { "name": "back_pillow_vs_seat", "positive": "back pillow cushion", "negative": "flat seat surface" }
+    ]
+  },
+  {
+    "input_dir": "bag/positives",
+    "output_name": "bag",
+    "concepts": [
+      { "name": "bag_vs_box", "positive": "bag", "negative": "rigid box" }
+    ]
+  },
+  {
+    "input_dir": "balcony/positives",
+    "output_name": "balcony",
+    "concepts": [
+      { "name": "balcony_vs_ground_floor", "positive": "balcony elevated outdoor platform", "negative": "ground floor indoor room" }
+    ]
+  },
+  {
+    "input_dir": "bannister/positives",
+    "output_name": "bannister",
+    "concepts": [
+      { "name": "bannister_vs_open_stairs", "positive": "bannister stair railing", "negative": "open staircase without railing" }
+    ]
+  },
+  {
+    "input_dir": "base/positives",
+    "output_name": "base",
+    "concepts": [
+      { "name": "base_vs_top", "positive": "base bottom structure", "negative": "top surface" }
+    ]
+  },
+  {
+    "input_dir": "basket/positives",
+    "output_name": "basket",
+    "concepts": [
+      { "name": "basket_vs_box", "positive": "woven basket", "negative": "solid box container" }
+    ]
+  },
+  {
+    "input_dir": "bathroom_s/positives",
+    "output_name": "bathroom_s",
+    "concepts": [
+      { "name": "bathroom_vs_bedroom", "positive": "bathroom", "negative": "bedroom" }
+    ]
+  },
+  {
+    "input_dir": "bathtub/positives",
+    "output_name": "bathtub",
+    "concepts": [
+      { "name": "bathtub_vs_shower", "positive": "bathtub", "negative": "shower" }
+    ]
+  },
+  {
+    "input_dir": "beak/positives",
+    "output_name": "beak",
+    "concepts": [
+      { "name": "beak_vs_mouth", "positive": "bird beak", "negative": "human mouth" }
+    ]
+  },
+  {
+    "input_dir": "bed/positives",
+    "output_name": "bed",
+    "concepts": [
+      { "name": "bed_vs_sofa", "positive": "bed", "negative": "sofa couch" }
+    ]
+  },
+  {
+    "input_dir": "bedclothes/positives",
+    "output_name": "bedclothes",
+    "concepts": [
+      { "name": "bedclothes_vs_bare_mattress", "positive": "bedclothes sheets blanket", "negative": "bare mattress" }
+    ]
+  },
+  {
+    "input_dir": "bedroom_s/positives",
+    "output_name": "bedroom_s",
+    "concepts": [
+      { "name": "bedroom_vs_living_room", "positive": "bedroom", "negative": "living room" }
+    ]
+  },
+  {
+    "input_dir": "bench/positives",
+    "output_name": "bench",
+    "concepts": [
+      { "name": "bench_vs_chair", "positive": "bench", "negative": "chair" }
+    ]
+  },
+  {
+    "input_dir": "bicycle/positives",
+    "output_name": "bicycle",
+    "concepts": [
+      { "name": "bicycle_vs_motorbike", "positive": "bicycle", "negative": "motorbike" }
+    ]
+  },
+  {
+    "input_dir": "bird/positives",
+    "output_name": "bird",
+    "concepts": [
+      { "name": "bird_vs_fish", "positive": "bird", "negative": "fish" }
+    ]
+  },
+  {
+    "input_dir": "blackness/positives",
+    "output_name": "blackness",
+    "concepts": [
+      { "name": "blackness_vs_whiteness", "positive": "black dark surface", "negative": "white bright surface" }
+    ]
+  },
+  {
+    "input_dir": "blind/positives",
+    "output_name": "blind",
+    "concepts": [
+      { "name": "blind_vs_open_window", "positive": "window blind closed", "negative": "open window curtain" }
+    ]
+  },
+  {
+    "input_dir": "blotchy/positives",
+    "output_name": "blotchy",
+    "concepts": [
+      { "name": "blotchy_vs_uniform", "positive": "blotchy irregular pattern", "negative": "uniform smooth surface" }
+    ]
+  },
+  {
+    "input_dir": "blueness/positives",
+    "output_name": "blueness",
+    "concepts": [
+      { "name": "blueness_vs_redness", "positive": "blue coloured surface", "negative": "red coloured surface" }
+    ]
+  },
+  {
+    "input_dir": "blurriness/positives",
+    "output_name": "blurriness",
+    "concepts": [
+      { "name": "blurry_vs_sharp", "positive": "blurry out of focus", "negative": "sharp in focus" }
+    ]
+  },
+  {
+    "input_dir": "board/positives",
+    "output_name": "board",
+    "concepts": [
+      { "name": "board_vs_wall", "positive": "board flat panel", "negative": "plain wall" }
+    ]
+  },
+  {
+    "input_dir": "body/positives",
+    "output_name": "body",
+    "concepts": [
+      { "name": "body_vs_face", "positive": "human body torso", "negative": "human face" }
+    ]
+  },
+  {
+    "input_dir": "book/positives",
+    "output_name": "book",
+    "concepts": [
+      { "name": "book_vs_screen", "positive": "book", "negative": "digital screen" }
+    ]
+  },
+  {
+    "input_dir": "bookcase/positives",
+    "output_name": "bookcase",
+    "concepts": [
+      { "name": "bookcase_vs_cabinet", "positive": "bookcase bookshelf", "negative": "closed cabinet" }
+    ]
+  },
+  {
+    "input_dir": "bottle/positives",
+    "output_name": "bottle",
+    "concepts": [
+      { "name": "bottle_vs_cup", "positive": "bottle", "negative": "cup glass" }
+    ]
+  },
+  {
+    "input_dir": "bowl/positives",
+    "output_name": "bowl",
+    "concepts": [
+      { "name": "bowl_vs_plate", "positive": "bowl", "negative": "flat plate" }
+    ]
+  },
+  {
+    "input_dir": "box/positives",
+    "output_name": "box",
+    "concepts": [
+      { "name": "box_vs_bag", "positive": "rigid box container", "negative": "soft bag" }
+    ]
+  },
+  {
+    "input_dir": "brick/positives",
+    "output_name": "brick",
+    "concepts": [
+      { "name": "brick_vs_concrete", "positive": "brick wall surface", "negative": "smooth concrete surface" }
+    ]
+  },
+  {
+    "input_dir": "bridge/positives",
+    "output_name": "bridge",
+    "concepts": [
+      { "name": "bridge_vs_road", "positive": "bridge over water", "negative": "road on ground" }
+    ]
+  },
+  {
+    "input_dir": "bucket/positives",
+    "output_name": "bucket",
+    "concepts": [
+      { "name": "bucket_vs_bowl", "positive": "bucket pail", "negative": "bowl" }
+    ]
+  },
+  {
+    "input_dir": "building/positives",
+    "output_name": "building",
+    "concepts": [
+      { "name": "building_vs_nature", "positive": "building structure", "negative": "natural landscape" }
+    ]
+  },
+  {
+    "input_dir": "bumper/positives",
+    "output_name": "bumper",
+    "concepts": [
+      { "name": "bumper_vs_hood", "positive": "car bumper", "negative": "car hood" }
+    ]
+  },
+  {
+    "input_dir": "bus/positives",
+    "output_name": "bus",
+    "concepts": [
+      { "name": "bus_vs_car", "positive": "bus", "negative": "car" }
+    ]
+  },
+  {
+    "input_dir": "bush/positives",
+    "output_name": "bush",
+    "concepts": [
+      { "name": "bush_vs_tree", "positive": "bush shrub", "negative": "tall tree" }
+    ]
+  },
+  {
+    "input_dir": "cabinet/positives",
+    "output_name": "cabinet",
+    "concepts": [
+      { "name": "cabinet_vs_bookcase", "positive": "closed cabinet", "negative": "open bookcase" }
+    ]
+  },
+  {
+    "input_dir": "can/positives",
+    "output_name": "can",
+    "concepts": [
+      { "name": "can_vs_bottle", "positive": "metal can", "negative": "glass bottle" }
+    ]
+  },
+  {
+    "input_dir": "candlestick/positives",
+    "output_name": "candlestick",
+    "concepts": [
+      { "name": "candlestick_vs_lamp", "positive": "candlestick candle holder", "negative": "electric lamp" }
+    ]
+  },
+  {
+    "input_dir": "canopy/positives",
+    "output_name": "canopy",
+    "concepts": [
+      { "name": "canopy_vs_open_sky", "positive": "canopy overhead cover", "negative": "open sky" }
+    ]
+  },
+  {
+    "input_dir": "cap/positives",
+    "output_name": "cap",
+    "concepts": [
+      { "name": "cap_vs_bare_head", "positive": "cap hat headwear", "negative": "bare uncovered head" }
+    ]
+  },
+  {
+    "input_dir": "car/positives",
+    "output_name": "car",
+    "concepts": [
+      { "name": "car_vs_bicycle", "positive": "car automobile", "negative": "bicycle" }
+    ]
+  },
+  {
+    "input_dir": "cardboard/positives",
+    "output_name": "cardboard",
+    "concepts": [
+      { "name": "cardboard_vs_metal", "positive": "cardboard surface", "negative": "metal surface" }
+    ]
+  },
+  {
+    "input_dir": "carpet/positives",
+    "output_name": "carpet",
+    "concepts": [
+      { "name": "carpet_vs_bare_floor", "positive": "carpet rug", "negative": "bare hard floor" }
+    ]
+  },
+  {
+    "input_dir": "cat/positives",
+    "output_name": "cat",
+    "concepts": [
+      { "name": "cat_vs_dog", "positive": "cat", "negative": "dog" }
+    ]
+  },
+  {
+    "input_dir": "ceiling/positives",
+    "output_name": "ceiling",
+    "concepts": [
+      { "name": "ceiling_vs_floor", "positive": "ceiling overhead surface", "negative": "floor ground surface" }
+    ]
+  },
+  {
+    "input_dir": "ceramic/positives",
+    "output_name": "ceramic",
+    "concepts": [
+      { "name": "ceramic_vs_metal", "positive": "ceramic surface material", "negative": "metal surface material" }
+    ]
+  },
+  {
+    "input_dir": "chain_wheel/positives",
+    "output_name": "chain_wheel",
+    "concepts": [
+      { "name": "chain_wheel_vs_smooth_wheel", "positive": "chain wheel gear sprocket", "negative": "smooth rubber wheel tyre" }
+    ]
+  },
+  {
+    "input_dir": "chair/positives",
+    "output_name": "chair",
+    "concepts": [
+      { "name": "chair_vs_bench", "positive": "chair single seat", "negative": "bench long seat" }
+    ]
+  },
+  {
+    "input_dir": "chandelier/positives",
+    "output_name": "chandelier",
+    "concepts": [
+      { "name": "chandelier_vs_floor_lamp", "positive": "chandelier ceiling light", "negative": "floor lamp" }
+    ]
+  },
+  {
+    "input_dir": "chest_of_drawers/positives",
+    "output_name": "chest_of_drawers",
+    "concepts": [
+      { "name": "chest_of_drawers_vs_wardrobe", "positive": "chest of drawers dresser", "negative": "wardrobe closet" }
+    ]
+  },
+  {
+    "input_dir": "chimney/positives",
+    "output_name": "chimney",
+    "concepts": [
+      { "name": "chimney_vs_wall", "positive": "chimney smokestack", "negative": "plain wall" }
+    ]
+  },
+  {
+    "input_dir": "clock/positives",
+    "output_name": "clock",
+    "concepts": [
+      { "name": "clock_vs_mirror", "positive": "clock timepiece", "negative": "mirror" }
+    ]
+  },
+  {
+    "input_dir": "coach/positives",
+    "output_name": "coach",
+    "concepts": [
+      { "name": "coach_vs_car", "positive": "coach carriage vehicle", "negative": "car automobile" }
+    ]
+  },
+  {
+    "input_dir": "coffee_table/positives",
+    "output_name": "coffee_table",
+    "concepts": [
+      { "name": "coffee_table_vs_dining_table", "positive": "coffee table low table", "negative": "tall dining table" }
+    ]
+  },
+  {
+    "input_dir": "column/positives",
+    "output_name": "column",
+    "concepts": [
+      { "name": "column_vs_wall", "positive": "column pillar", "negative": "flat wall" }
+    ]
+  },
+  {
+    "input_dir": "computer/positives",
+    "output_name": "computer",
+    "concepts": [
+      { "name": "computer_vs_book", "positive": "computer screen monitor", "negative": "book" }
+    ]
+  },
+  {
+    "input_dir": "concrete/positives",
+    "output_name": "concrete",
+    "concepts": [
+      { "name": "concrete_vs_brick", "positive": "concrete surface", "negative": "brick surface" }
+    ]
+  },
+  {
+    "input_dir": "counter/positives",
+    "output_name": "counter",
+    "concepts": [
+      { "name": "counter_vs_table", "positive": "kitchen counter worktop", "negative": "dining table" }
+    ]
+  },
+  {
+    "input_dir": "countertop/positives",
+    "output_name": "countertop",
+    "concepts": [
+      { "name": "countertop_vs_floor", "positive": "countertop surface", "negative": "floor surface" }
+    ]
+  },
+  {
+    "input_dir": "cow/positives",
+    "output_name": "cow",
+    "concepts": [
+      { "name": "cow_vs_horse", "positive": "cow", "negative": "horse" }
+    ]
+  },
+  {
+    "input_dir": "cup/positives",
+    "output_name": "cup",
+    "concepts": [
+      { "name": "cup_vs_bottle", "positive": "cup mug", "negative": "bottle" }
+    ]
+  },
+  {
+    "input_dir": "curtain/positives",
+    "output_name": "curtain",
+    "concepts": [
+      { "name": "curtain_vs_blind", "positive": "fabric curtain drape", "negative": "hard window blind" }
+    ]
+  },
+  {
+    "input_dir": "cushion/positives",
+    "output_name": "cushion",
+    "concepts": [
+      { "name": "cushion_vs_hard_seat", "positive": "soft cushion", "negative": "hard seat surface" }
+    ]
+  },
+  {
+    "input_dir": "desk/positives",
+    "output_name": "desk",
+    "concepts": [
+      { "name": "desk_vs_dining_table", "positive": "desk work surface", "negative": "dining table" }
+    ]
+  },
+  {
+    "input_dir": "dining_room_s/positives",
+    "output_name": "dining_room_s",
+    "concepts": [
+      { "name": "dining_room_vs_bedroom", "positive": "dining room", "negative": "bedroom" }
+    ]
+  },
+  {
+    "input_dir": "dog/positives",
+    "output_name": "dog",
+    "concepts": [
+      { "name": "dog_vs_cat", "positive": "dog", "negative": "cat" }
+    ]
+  },
+  {
+    "input_dir": "door/positives",
+    "output_name": "door",
+    "concepts": [
+      { "name": "door_vs_window", "positive": "door", "negative": "window" }
+    ]
+  },
+  {
+    "input_dir": "door_frame/positives",
+    "output_name": "door_frame",
+    "concepts": [
+      { "name": "door_frame_vs_window_frame", "positive": "door frame", "negative": "window frame" }
+    ]
+  },
+  {
+    "input_dir": "doorframe/positives",
+    "output_name": "doorframe",
+    "concepts": [
+      { "name": "doorframe_vs_wall", "positive": "doorframe entrance frame", "negative": "plain wall" }
+    ]
+  },
+  {
+    "input_dir": "double_door/positives",
+    "output_name": "double_door",
+    "concepts": [
+      { "name": "double_door_vs_single_door", "positive": "double door", "negative": "single door" }
+    ]
+  },
+  {
+    "input_dir": "drawer/positives",
+    "output_name": "drawer",
+    "concepts": [
+      { "name": "drawer_vs_shelf", "positive": "drawer pull-out storage", "negative": "open shelf" }
+    ]
+  },
+  {
+    "input_dir": "drinking_glass/positives",
+    "output_name": "drinking_glass",
+    "concepts": [
+      { "name": "drinking_glass_vs_cup", "positive": "drinking glass", "negative": "ceramic cup mug" }
+    ]
+  },
+  {
+    "input_dir": "ear/positives",
+    "output_name": "ear",
+    "concepts": [
+      { "name": "ear_vs_eye", "positive": "ear", "negative": "eye" }
+    ]
+  },
+  {
+    "input_dir": "earth/positives",
+    "output_name": "earth",
+    "concepts": [
+      { "name": "earth_vs_pavement", "positive": "earth soil ground", "negative": "paved surface" }
+    ]
+  },
+  {
+    "input_dir": "engine/positives",
+    "output_name": "engine",
+    "concepts": [
+      { "name": "engine_vs_exterior", "positive": "engine mechanical parts", "negative": "smooth vehicle exterior" }
+    ]
+  },
+  {
+    "input_dir": "exhaust_hood/positives",
+    "output_name": "exhaust_hood",
+    "concepts": [
+      { "name": "exhaust_hood_vs_open_ceiling", "positive": "exhaust hood range hood", "negative": "open ceiling" }
+    ]
+  },
+  {
+    "input_dir": "eye/positives",
+    "output_name": "eye",
+    "concepts": [
+      { "name": "eye_vs_mouth", "positive": "eye", "negative": "mouth" }
+    ]
+  },
+  {
+    "input_dir": "eyebrow/positives",
+    "output_name": "eyebrow",
+    "concepts": [
+      { "name": "eyebrow_vs_eye", "positive": "eyebrow", "negative": "eye" }
+    ]
+  },
+  {
+    "input_dir": "fabric/positives",
+    "output_name": "fabric",
+    "concepts": [
+      { "name": "fabric_vs_hard_surface", "positive": "fabric textile soft material", "negative": "hard rigid surface" }
+    ]
+  },
+  {
+    "input_dir": "fan/positives",
+    "output_name": "fan",
+    "concepts": [
+      { "name": "fan_vs_air_conditioner", "positive": "fan ventilator", "negative": "air conditioner unit" }
+    ]
+  },
+  {
+    "input_dir": "faucet/positives",
+    "output_name": "faucet",
+    "concepts": [
+      { "name": "faucet_vs_pipe", "positive": "faucet tap", "negative": "plain pipe" }
+    ]
+  },
+  {
+    "input_dir": "fence/positives",
+    "output_name": "fence",
+    "concepts": [
+      { "name": "fence_vs_wall", "positive": "fence", "negative": "solid wall" }
+    ]
+  },
+  {
+    "input_dir": "field/positives",
+    "output_name": "field",
+    "concepts": [
+      { "name": "field_vs_forest", "positive": "open field", "negative": "dense forest" }
+    ]
+  },
+  {
+    "input_dir": "figurine/positives",
+    "output_name": "figurine",
+    "concepts": [
+      { "name": "figurine_vs_furniture", "positive": "figurine decorative object", "negative": "functional furniture" }
+    ]
+  },
+  {
+    "input_dir": "fireplace/positives",
+    "output_name": "fireplace",
+    "concepts": [
+      { "name": "fireplace_vs_radiator", "positive": "fireplace hearth", "negative": "radiator heater" }
+    ]
+  },
+  {
+    "input_dir": "flag/positives",
+    "output_name": "flag",
+    "concepts": [
+      { "name": "flag_vs_banner", "positive": "flag", "negative": "plain banner sign" }
+    ]
+  },
+  {
+    "input_dir": "floor/positives",
+    "output_name": "floor",
+    "concepts": [
+      { "name": "floor_vs_ceiling", "positive": "floor ground surface", "negative": "ceiling overhead surface" }
+    ]
+  },
+  {
+    "input_dir": "flower/positives",
+    "output_name": "flower",
+    "concepts": [
+      { "name": "flower_vs_leaf", "positive": "flower bloom", "negative": "plain leaf foliage" }
+    ]
+  },
+  {
+    "input_dir": "flowerpot/positives",
+    "output_name": "flowerpot",
+    "concepts": [
+      { "name": "flowerpot_vs_vase", "positive": "flowerpot plant pot", "negative": "decorative vase" }
+    ]
+  },
+  {
+    "input_dir": "food/positives",
+    "output_name": "food",
+    "concepts": [
+      { "name": "food_vs_empty_plate", "positive": "food meal dish", "negative": "empty plate" }
+    ]
+  },
+  {
+    "input_dir": "foot/positives",
+    "output_name": "foot",
+    "concepts": [
+      { "name": "foot_vs_hand", "positive": "foot", "negative": "hand" }
+    ]
+  },
+  {
+    "input_dir": "footboard/positives",
+    "output_name": "footboard",
+    "concepts": [
+      { "name": "footboard_vs_headboard", "positive": "footboard end of bed", "negative": "headboard top of bed" }
+    ]
+  },
+  {
+    "input_dir": "frame/positives",
+    "output_name": "frame",
+    "concepts": [
+      { "name": "frame_vs_frameless", "positive": "frame border surround", "negative": "frameless plain surface" }
+    ]
+  },
+  {
+    "input_dir": "glass/positives",
+    "output_name": "glass",
+    "concepts": [
+      { "name": "glass_vs_metal", "positive": "glass transparent surface", "negative": "opaque metal surface" }
+    ]
+  },
+  {
+    "input_dir": "granite/positives",
+    "output_name": "granite",
+    "concepts": [
+      { "name": "granite_vs_wood", "positive": "granite stone surface", "negative": "wood surface" }
+    ]
+  },
+  {
+    "input_dir": "grass/positives",
+    "output_name": "grass",
+    "concepts": [
+      { "name": "grass_vs_pavement", "positive": "grass lawn", "negative": "paved surface" }
+    ]
+  },
+  {
+    "input_dir": "greenness/positives",
+    "output_name": "greenness",
+    "concepts": [
+      { "name": "greenness_vs_redness", "positive": "green coloured surface vegetation", "negative": "red coloured surface" }
+    ]
+  },
+  {
+    "input_dir": "ground/positives",
+    "output_name": "ground",
+    "concepts": [
+      { "name": "ground_vs_sky", "positive": "ground surface earth", "negative": "sky overhead" }
+    ]
+  },
+  {
+    "input_dir": "hair/positives",
+    "output_name": "hair",
+    "concepts": [
+      { "name": "hair_vs_bare_scalp", "positive": "hair on head", "negative": "bare scalp skin" }
+    ]
+  },
+  {
+    "input_dir": "hand/positives",
+    "output_name": "hand",
+    "concepts": [
+      { "name": "hand_vs_foot", "positive": "hand", "negative": "foot" }
+    ]
+  },
+  {
+    "input_dir": "handle/positives",
+    "output_name": "handle",
+    "concepts": [
+      { "name": "handle_vs_flat_surface", "positive": "handle grip", "negative": "flat smooth surface" }
+    ]
+  },
+  {
+    "input_dir": "handle_bar/positives",
+    "output_name": "handle_bar",
+    "concepts": [
+      { "name": "handlebar_vs_steering_wheel", "positive": "handlebar bicycle bar", "negative": "steering wheel" }
+    ]
+  },
+  {
+    "input_dir": "head/positives",
+    "output_name": "head",
+    "concepts": [
+      { "name": "head_vs_body", "positive": "head face", "negative": "body torso" }
+    ]
+  },
+  {
+    "input_dir": "headboard/positives",
+    "output_name": "headboard",
+    "concepts": [
+      { "name": "headboard_vs_footboard", "positive": "headboard top of bed", "negative": "footboard end of bed" }
+    ]
+  },
+  {
+    "input_dir": "headlight/positives",
+    "output_name": "headlight",
+    "concepts": [
+      { "name": "headlight_vs_taillight", "positive": "headlight front vehicle light", "negative": "taillight rear vehicle light" }
+    ]
+  },
+  {
+    "input_dir": "hill/positives",
+    "output_name": "hill",
+    "concepts": [
+      { "name": "hill_vs_flat_land", "positive": "hill elevated terrain", "negative": "flat land" }
+    ]
+  },
+  {
+    "input_dir": "horse/positives",
+    "output_name": "horse",
+    "concepts": [
+      { "name": "horse_vs_cow", "positive": "horse", "negative": "cow" }
+    ]
+  },
+  {
+    "input_dir": "house/positives",
+    "output_name": "house",
+    "concepts": [
+      { "name": "house_vs_apartment_block", "positive": "house detached building", "negative": "apartment block" }
+    ]
+  },
+  {
+    "input_dir": "inside_arm/positives",
+    "output_name": "inside_arm",
+    "concepts": [
+      { "name": "inside_arm_vs_outside_arm", "positive": "inside arm inner surface", "negative": "outside arm outer surface" }
+    ]
+  },
+  {
+    "input_dir": "jar/positives",
+    "output_name": "jar",
+    "concepts": [
+      { "name": "jar_vs_bottle", "positive": "jar wide container", "negative": "narrow bottle" }
+    ]
+  },
+  {
+    "input_dir": "keyboard/positives",
+    "output_name": "keyboard",
+    "concepts": [
+      { "name": "keyboard_vs_mouse", "positive": "keyboard", "negative": "computer mouse" }
+    ]
+  },
+  {
+    "input_dir": "knob/positives",
+    "output_name": "knob",
+    "concepts": [
+      { "name": "knob_vs_handle", "positive": "knob round handle", "negative": "long bar handle" }
+    ]
+  },
+  {
+    "input_dir": "laminate/positives",
+    "output_name": "laminate",
+    "concepts": [
+      { "name": "laminate_vs_carpet", "positive": "laminate hard floor", "negative": "soft carpet floor" }
+    ]
+  },
+  {
+    "input_dir": "lamp/positives",
+    "output_name": "lamp",
+    "concepts": [
+      { "name": "lamp_vs_chandelier", "positive": "lamp table or floor light", "negative": "chandelier ceiling light" }
+    ]
+  },
+  {
+    "input_dir": "leather/positives",
+    "output_name": "leather",
+    "concepts": [
+      { "name": "leather_vs_fabric", "positive": "leather material surface", "negative": "fabric textile surface" }
+    ]
+  },
+  {
+    "input_dir": "leg/positives",
+    "output_name": "leg",
+    "concepts": [
+      { "name": "leg_vs_arm", "positive": "human leg", "negative": "human arm" }
+    ]
+  },
+  {
+    "input_dir": "lid/positives",
+    "output_name": "lid",
+    "concepts": [
+      { "name": "lid_vs_open_container", "positive": "lid cover on container", "negative": "open container without lid" }
+    ]
+  },
+  {
+    "input_dir": "light/positives",
+    "output_name": "light",
+    "concepts": [
+      { "name": "light_vs_darkness", "positive": "bright light source", "negative": "dark unlit area" }
+    ]
+  },
+  {
+    "input_dir": "loudspeaker/positives",
+    "output_name": "loudspeaker",
+    "concepts": [
+      { "name": "loudspeaker_vs_microphone", "positive": "loudspeaker speaker", "negative": "microphone" }
+    ]
+  },
+  {
+    "input_dir": "manhole/positives",
+    "output_name": "manhole",
+    "concepts": [
+      { "name": "manhole_vs_pavement", "positive": "manhole cover", "negative": "plain pavement" }
+    ]
+  },
+  {
+    "input_dir": "metal/positives",
+    "output_name": "metal",
+    "concepts": [
+      { "name": "metal_vs_wood", "positive": "metal surface material", "negative": "wood surface material" }
+    ]
+  },
+  {
+    "input_dir": "microwave/positives",
+    "output_name": "microwave",
+    "concepts": [
+      { "name": "microwave_vs_oven", "positive": "microwave appliance", "negative": "oven appliance" }
+    ]
+  },
+  {
+    "input_dir": "minibike/positives",
+    "output_name": "minibike",
+    "concepts": [
+      { "name": "minibike_vs_bicycle", "positive": "minibike small motorbike", "negative": "bicycle" }
+    ]
+  },
+  {
+    "input_dir": "mirror/positives",
+    "output_name": "mirror",
+    "concepts": [
+      { "name": "mirror_vs_painting", "positive": "mirror reflective surface", "negative": "painting artwork" }
+    ]
+  },
+  {
+    "input_dir": "motorbike/positives",
+    "output_name": "motorbike",
+    "concepts": [
+      { "name": "motorbike_vs_bicycle", "positive": "motorbike motorcycle", "negative": "bicycle" }
+    ]
+  },
+  {
+    "input_dir": "mountain/positives",
+    "output_name": "mountain",
+    "concepts": [
+      { "name": "mountain_vs_flat_land", "positive": "mountain peak", "negative": "flat land" }
+    ]
+  },
+  {
+    "input_dir": "mouse/positives",
+    "output_name": "mouse",
+    "concepts": [
+      { "name": "mouse_vs_keyboard", "positive": "computer mouse", "negative": "keyboard" }
+    ]
+  },
+  {
+    "input_dir": "mouth/positives",
+    "output_name": "mouth",
+    "concepts": [
+      { "name": "mouth_vs_eye", "positive": "mouth lips", "negative": "eye" }
+    ]
+  },
+  {
+    "input_dir": "muzzle/positives",
+    "output_name": "muzzle",
+    "concepts": [
+      { "name": "muzzle_vs_face", "positive": "animal muzzle snout", "negative": "human face" }
+    ]
+  },
+  {
+    "input_dir": "napkin/positives",
+    "output_name": "napkin",
+    "concepts": [
+      { "name": "napkin_vs_tablecloth", "positive": "napkin small cloth", "negative": "tablecloth large cloth" }
+    ]
+  },
+  {
+    "input_dir": "neck/positives",
+    "output_name": "neck",
+    "concepts": [
+      { "name": "neck_vs_face", "positive": "neck", "negative": "face" }
+    ]
+  },
+  {
+    "input_dir": "nose/positives",
+    "output_name": "nose",
+    "concepts": [
+      { "name": "nose_vs_mouth", "positive": "nose", "negative": "mouth" }
+    ]
+  },
+  {
+    "input_dir": "ottoman/positives",
+    "output_name": "ottoman",
+    "concepts": [
+      { "name": "ottoman_vs_chair", "positive": "ottoman footstool", "negative": "chair with back" }
+    ]
+  },
+  {
+    "input_dir": "outside_arm/positives",
+    "output_name": "outside_arm",
+    "concepts": [
+      { "name": "outside_arm_vs_inside_arm", "positive": "outside arm outer surface", "negative": "inside arm inner surface" }
+    ]
+  },
+  {
+    "input_dir": "oven/positives",
+    "output_name": "oven",
+    "concepts": [
+      { "name": "oven_vs_microwave", "positive": "oven appliance", "negative": "microwave appliance" }
+    ]
+  },
+  {
+    "input_dir": "pack/positives",
+    "output_name": "pack",
+    "concepts": [
+      { "name": "pack_vs_bag", "positive": "pack bundle wrapped items", "negative": "open bag" }
+    ]
+  },
+  {
+    "input_dir": "painted/positives",
+    "output_name": "painted",
+    "concepts": [
+      { "name": "painted_vs_unpainted", "positive": "painted coloured surface", "negative": "bare unpainted surface" }
+    ]
+  },
+  {
+    "input_dir": "painting/positives",
+    "output_name": "painting",
+    "concepts": [
+      { "name": "painting_vs_mirror", "positive": "painting artwork on wall", "negative": "mirror on wall" }
+    ]
+  },
+  {
+    "input_dir": "palm/positives",
+    "output_name": "palm",
+    "concepts": [
+      { "name": "palm_vs_tree", "positive": "palm tree", "negative": "deciduous tree" }
+    ]
+  },
+  {
+    "input_dir": "pane/positives",
+    "output_name": "pane",
+    "concepts": [
+      { "name": "pane_vs_wall", "positive": "glass window pane", "negative": "solid wall" }
+    ]
+  },
+  {
+    "input_dir": "paper/positives",
+    "output_name": "paper",
+    "concepts": [
+      { "name": "paper_vs_screen", "positive": "paper sheet document", "negative": "digital screen" }
+    ]
+  },
+  {
+    "input_dir": "path/positives",
+    "output_name": "path",
+    "concepts": [
+      { "name": "path_vs_road", "positive": "narrow path walkway", "negative": "wide road" }
+    ]
+  },
+  {
+    "input_dir": "paw/positives",
+    "output_name": "paw",
+    "concepts": [
+      { "name": "paw_vs_hand", "positive": "animal paw", "negative": "human hand" }
+    ]
+  },
+  {
+    "input_dir": "pedestal/positives",
+    "output_name": "pedestal",
+    "concepts": [
+      { "name": "pedestal_vs_floor", "positive": "pedestal raised platform", "negative": "flat floor" }
+    ]
+  },
+  {
+    "input_dir": "person/positives",
+    "output_name": "person",
+    "concepts": [
+      { "name": "person_vs_animal", "positive": "person human", "negative": "animal" }
+    ]
+  },
+  {
+    "input_dir": "pillar/positives",
+    "output_name": "pillar",
+    "concepts": [
+      { "name": "pillar_vs_wall", "positive": "pillar column vertical structure", "negative": "flat wall" }
+    ]
+  },
+  {
+    "input_dir": "pillow/positives",
+    "output_name": "pillow",
+    "concepts": [
+      { "name": "pillow_vs_cushion", "positive": "pillow bed pillow", "negative": "sofa cushion" }
+    ]
+  },
+  {
+    "input_dir": "pipe/positives",
+    "output_name": "pipe",
+    "concepts": [
+      { "name": "pipe_vs_flat_surface", "positive": "pipe tube conduit", "negative": "flat wall surface" }
+    ]
+  },
+  {
+    "input_dir": "plant/positives",
+    "output_name": "plant",
+    "concepts": [
+      { "name": "plant_vs_furniture", "positive": "indoor plant", "negative": "furniture" }
+    ]
+  },
+  {
+    "input_dir": "plate/positives",
+    "output_name": "plate",
+    "concepts": [
+      { "name": "plate_vs_bowl", "positive": "flat plate", "negative": "deep bowl" }
+    ]
+  },
+  {
+    "input_dir": "polka_dots/positives",
+    "output_name": "polka_dots",
+    "concepts": [
+      { "name": "polka_dots_vs_stripes", "positive": "polka dot pattern", "negative": "striped pattern" }
+    ]
+  },
+  {
+    "input_dir": "redness/positives",
+    "output_name": "redness",
+    "concepts": [
+      { "name": "redness_vs_blueness", "positive": "red coloured surface", "negative": "blue coloured surface" }
+    ]
+  },
+  {
+    "input_dir": "refrigerator/positives",
+    "output_name": "refrigerator",
+    "concepts": [
+      { "name": "refrigerator_vs_oven", "positive": "refrigerator fridge", "negative": "oven" }
+    ]
+  },
+  {
+    "input_dir": "sand/positives",
+    "output_name": "sand",
+    "concepts": [
+      { "name": "sand_vs_grass", "positive": "sand surface", "negative": "grass surface" }
+    ]
+  },
+  {
+    "input_dir": "snow/positives",
+    "output_name": "snow",
+    "concepts": [
+      { "name": "snow_vs_grass", "positive": "snow covered surface", "negative": "green grass surface" }
+    ]
+  },
+  {
+    "input_dir": "sofa/positives",
+    "output_name": "sofa",
+    "concepts": [
+      { "name": "sofa_vs_armchair", "positive": "sofa couch", "negative": "armchair single seat" }
+    ]
+  },
+  {
+    "input_dir": "stairs/positives",
+    "output_name": "stairs",
+    "concepts": [
+      { "name": "stairs_vs_ramp", "positive": "stairs staircase steps", "negative": "ramp slope" }
+    ]
+  },
+  {
+    "input_dir": "street_s/positives",
+    "output_name": "street_s",
+    "concepts": [
+      { "name": "street_vs_path", "positive": "street road urban", "negative": "narrow path" }
+    ]
+  },
+  {
+    "input_dir": "stripes/positives",
+    "output_name": "stripes",
+    "concepts": [
+      { "name": "stripes_vs_polka_dots", "positive": "striped pattern", "negative": "polka dot pattern" }
+    ]
+  },
+  {
+    "input_dir": "toilet/positives",
+    "output_name": "toilet",
+    "concepts": [
+      { "name": "toilet_vs_sink", "positive": "toilet", "negative": "sink basin" }
+    ]
+  },
+  {
+    "input_dir": "tree/positives",
+    "output_name": "tree",
+    "concepts": [
+      { "name": "tree_vs_bush", "positive": "tall tree", "negative": "low bush shrub" }
+    ]
+  },
+  {
+    "input_dir": "water/positives",
+    "output_name": "water",
+    "concepts": [
+      { "name": "water_vs_land", "positive": "water surface", "negative": "dry land" }
+    ]
+  }
+]

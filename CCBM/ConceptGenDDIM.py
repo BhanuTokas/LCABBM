@@ -383,7 +383,14 @@ class ConceptDrifter:
         latent_scale=8,
         use_ddim: bool = False,
         ddim_eta: float = 0.0,
+        vae_scaling_factor: float = 0.35,
     ):
+        """
+        vae_scaling_factor : only applied when use_ddim=True.
+                             Overrides pipe.vae.config.scaling_factor after the
+                             pipeline is loaded.  Has no effect when use_ddim=False
+                             (the pipeline's own default is used instead).
+        """
         self.device = device
         self.clip_interface = CLIPInterface(clip_model, dtype, device)
         self.diff_interface = DiffusionInterface(
@@ -397,6 +404,8 @@ class ConceptDrifter:
             use_ddim,
             ddim_eta,
         )
+        if use_ddim:
+            self.diff_interface.pipe.vae.config.scaling_factor = vae_scaling_factor
 
     def getConceptVector(self, positive_text: str, negative_text: str):
         embeddings = self.clip_interface.getTextEmbedding(
@@ -413,64 +422,178 @@ class ConceptDrifter:
         probs = torch.nn.functional.softmax(torch.tensor([prob_p, prob_n]))
         return probs
 
-    def perturbImagePoints(self, img, z_pos, z_neg, delta=0.1, latents=None):
+    def perturbImagePoints(
+        self,
+        img,
+        z_pos,
+        z_neg,
+        delta=0.1,
+        latents=None,
+        use_ddim: bool | None = None,
+        num_inference_steps: int = 40,
+        guidance_scale: float = 8.0,
+        ddim_guidance_scale: float = 32.0,
+        ddim_eta: float = 0.0,
+    ):
+        """
+        Perturb an image along a concept direction and return (base_img, perturbed_img).
+
+        The perturbation is applied in CLIP embedding space:
+          z_perturbed = z_i + delta * (z_pos - z_neg) * (||z_i|| / ||concept||)
+        The direction is flipped automatically so the output always moves toward
+        the negative concept (away from whatever the image already resembles most).
+
+        Two reconstruction paths are supported:
+
+        CLIP path (use_ddim=False):
+          - Decode z_i and z_perturbed directly via the unCLIP pipeline using
+            fixed random latents.  Fast but less faithful to the input image.
+
+        DDIM path (use_ddim=True):
+          - DDIM-invert the image to obtain a latent z_T that encodes its full
+            pixel-level structure.
+          - Reconstruct both base and perturbed images from the *same* z_T,
+            only swapping the CLIP conditioning.  This anchors the output to the
+            original image geometry while still shifting the concept.
+
+        Parameters
+        ----------
+        img                  : PIL.Image  – source image (already resized to H×W).
+        z_pos / z_neg        : torch.Tensor – CLIP text embeddings for the concept pair.
+        delta                : float – perturbation strength.
+        latents              : torch.Tensor | None – fixed latents for the CLIP path.
+        use_ddim             : bool | None – True → DDIM path, False → CLIP path,
+                               None → auto-detect from self.diff_interface.use_ddim.
+        num_inference_steps  : int   – denoising steps for the CLIP path.
+        guidance_scale       : float – guidance scale for the CLIP path.
+        ddim_guidance_scale  : float – guidance scale for DDIM reconstruction
+                               (higher values → stronger concept shift).
+        ddim_eta             : float – DDIM eta (0.0 = fully deterministic).
+
+        Returns
+        -------
+        (base_img, perturbed_img) : tuple[PIL.Image, PIL.Image]
+        """
+        # ── 1. Auto-detect DDIM mode ──────────────────────────────────────────
+        if use_ddim is None:
+            use_ddim = self.diff_interface.use_ddim
+
+        # ── 2. Compute CLIP embedding and concept direction ───────────────────
         z_i = self.clip_interface.getImgEmbedding(img)
         z_i_mag = z_i.norm(dim=1)
         vector = z_pos - z_neg
         magnitude = (z_pos.norm(dim=1) + z_neg.norm(dim=1)) / 2
+
+        # Flip direction so output always moves *away* from the closer concept
         probs = self.getProbs(z_i, z_pos, z_neg)
         if probs[0] > probs[1]:
             vector = -1 * vector
-        z_new = z_i + (delta * vector * (z_i_mag / magnitude))
+
+        z_perturbed = z_i + (delta * vector * (z_i_mag / magnitude))
         z_i = z_i.to(self.device)
-        z_new = z_new.to(self.device)
-        orig_img = self.diff_interface.genImage(z_i, latents=latents)
-        new_img = self.diff_interface.genImage(z_new, latents=latents)
-        if probs[0] > probs[1]:
-            return new_img, orig_img
+        z_perturbed = z_perturbed.to(self.device)
+
+        # ── 3a. CLIP path (original behaviour) ───────────────────────────────
+        if not use_ddim:
+            base_img = self.diff_interface.genImage(
+                z_i,
+                num_inference_steps=num_inference_steps,
+                guidance_scale=guidance_scale,
+                latents=latents,
+            )
+            perturbed_img = self.diff_interface.genImage(
+                z_perturbed,
+                num_inference_steps=num_inference_steps,
+                guidance_scale=guidance_scale,
+                latents=latents,
+            )
+
+        # ── 3b. DDIM path ─────────────────────────────────────────────────────
         else:
-            return orig_img, new_img
+            if not self.diff_interface.use_ddim:
+                raise RuntimeError(
+                    "DDIM path requested but DiffusionInterface was not initialised "
+                    "with use_ddim=True. Re-create ConceptDrifter with use_ddim=True."
+                )
+
+            # Invert the image once → shared structural latent z_T
+            z_T, _ = self.diff_interface.ddim_invert(
+                img, num_inference_steps=num_inference_steps
+            )
+
+            # Fresh deterministic generator for reproducible decoding
+            def _fresh_gen():
+                g = torch.Generator(device=self.diff_interface.device)
+                g.manual_seed(self.diff_interface.seed)
+                return g
+
+            # Base: reconstruct from z_T conditioned on the original CLIP embedding
+            base_img = self.diff_interface.reconstruct_from_zT(
+                z_i,
+                z_T,
+                num_inference_steps=num_inference_steps,
+                guidance_scale=ddim_guidance_scale,
+                eta=ddim_eta,
+                generator=_fresh_gen(),
+            )
+
+            # Perturbed: same z_T, shifted CLIP conditioning
+            perturbed_img = self.diff_interface.reconstruct_from_zT(
+                z_perturbed,
+                z_T,
+                num_inference_steps=num_inference_steps,
+                guidance_scale=ddim_guidance_scale,
+                eta=ddim_eta,
+                generator=_fresh_gen(),
+            )
+
+        # ── 4. Return in consistent (base, perturbed) order ───────────────────
+        if probs[0] > probs[1]:
+            # vector was flipped, so z_perturbed moves toward z_neg
+            return perturbed_img, base_img
+        else:
+            return base_img, perturbed_img
 
 
 if __name__ == "__main__":
-    # Example: enable DDIM with deterministic sampling (eta=0.0)
-    c = ConceptDrifter(use_ddim=True)
+    import os
+    os.makedirs("outputs", exist_ok=True)
+
     image = Image.open("samples/test_img2.jpg").resize((512, 512))
     text_positive = "tiger"
     text_negative = "lion"
-    embeddings = c.clip_interface.getTextEmbedding([text_positive, text_negative])
+
+    # ── CLIP path (fast, fixed latents) ──────────────────────────────────────
+    print("Running CLIP perturbation path ...")
+    c_clip = ConceptDrifter(use_ddim=False)
+    embeddings = c_clip.clip_interface.getTextEmbedding([text_positive, text_negative])
     z_pos = embeddings[0:1]
     z_neg = embeddings[1:2]
-    magnitude = (z_pos.norm(dim=1) + z_neg.norm(dim=1)) / 2
 
-    c.diff_interface.pipe.vae.config.scaling_factor = 0.35
-    # Example: invert and reconstruct deterministically
-    zT, timesteps = c.diff_interface.ddim_invert(image, num_inference_steps=50)
-    z_i = c.clip_interface.getImgEmbedding(image)
-    # c.diff_interface.pipe.image_processor.postprocess = new_postprocess
-    scale = z_i.norm(dim=1) / magnitude
-
-    # reuse same generator for reconstruction
-    gen = torch.Generator(device=c.diff_interface.device).manual_seed(
-        c.diff_interface.seed
-    )
-    recon = c.diff_interface.reconstruct_from_zT(
-        z_i, zT, num_inference_steps=40, guidance_scale=32.0, eta=0.0, generator=gen
-    )
-    recon.save("outputs/reconstructed_from_zT.png")
-
-    recon_1 = c.diff_interface.reconstruct_from_zT(
-        z_i + (z_pos - z_neg) * scale,
-        zT,
+    base_clip, perturbed_clip = c_clip.perturbImagePoints(
+        image, z_pos, z_neg, delta=0.2,
+        use_ddim=False,         # explicit, but would also be auto-detected
         num_inference_steps=40,
-        guidance_scale=32.0,
-        eta=0.0,
-        generator=gen,
+        guidance_scale=8.0,
     )
-    recon_1.save("outputs/reconstructed_from_zT_altered.png")
+    base_clip.save("outputs/clip_base.png")
+    perturbed_clip.save("outputs/clip_perturbed.png")
+    print("  Saved: outputs/clip_base.png, outputs/clip_perturbed.png")
 
-    ###Try scaling it down further and then increase it even more, override the scaling factor to simulate this behavior perhaps?
+    # ── DDIM path (structure-preserving, concept-shifted) ────────────────────
+    print("Running DDIM perturbation path ...")
+    c_ddim = ConceptDrifter(use_ddim=True, vae_scaling_factor=0.35)
+    embeddings = c_ddim.clip_interface.getTextEmbedding([text_positive, text_negative])
+    z_pos = embeddings[0:1]
+    z_neg = embeddings[1:2]
 
-    # img1, img2 = c.perturbImagePoints(image, z_pos, z_neg, delta=0.2)
-    recon.show()
-    recon_1.show()
+    base_ddim, perturbed_ddim = c_ddim.perturbImagePoints(
+        image, z_pos, z_neg, delta=0.5,
+        use_ddim=True,          # explicit, but would also be auto-detected
+        num_inference_steps=40,
+        ddim_guidance_scale=32.0,
+        ddim_eta=0.0,
+    )
+    base_ddim.save("outputs/ddim_base.png")
+    perturbed_ddim.save("outputs/ddim_perturbed_2.png")
+    print("  Saved: outputs/ddim_base.png, outputs/ddim_perturbed_2.png")
