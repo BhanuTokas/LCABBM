@@ -557,6 +557,7 @@ class ConceptDrifter:
 
 if __name__ == "__main__":
     import os
+
     os.makedirs("outputs", exist_ok=True)
 
     image = Image.open("samples/test_img2.jpg").resize((512, 512))
@@ -571,8 +572,11 @@ if __name__ == "__main__":
     z_neg = embeddings[1:2]
 
     base_clip, perturbed_clip = c_clip.perturbImagePoints(
-        image, z_pos, z_neg, delta=0.2,
-        use_ddim=False,         # explicit, but would also be auto-detected
+        image,
+        z_pos,
+        z_neg,
+        delta=0.2,
+        use_ddim=False,  # explicit, but would also be auto-detected
         num_inference_steps=40,
         guidance_scale=8.0,
     )
@@ -588,8 +592,11 @@ if __name__ == "__main__":
     z_neg = embeddings[1:2]
 
     base_ddim, perturbed_ddim = c_ddim.perturbImagePoints(
-        image, z_pos, z_neg, delta=0.5,
-        use_ddim=True,          # explicit, but would also be auto-detected
+        image,
+        z_pos,
+        z_neg,
+        delta=0.5,
+        use_ddim=True,  # explicit, but would also be auto-detected
         num_inference_steps=40,
         ddim_guidance_scale=32.0,
         ddim_eta=0.0,

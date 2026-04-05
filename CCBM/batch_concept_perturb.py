@@ -89,6 +89,7 @@ IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp", ".tiff", ".tif"}
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def load_config(config_path: Path) -> list[dict]:
     """
     Load and validate the JSON config.
@@ -119,7 +120,8 @@ def load_config(config_path: Path) -> list[dict]:
 def collect_images(input_dir: Path) -> list[Path]:
     """Return all image files (sorted) found directly inside input_dir (no recursion)."""
     return sorted(
-        p for p in input_dir.iterdir()
+        p
+        for p in input_dir.iterdir()
         if p.is_file() and p.suffix.lower() in IMAGE_EXTENSIONS
     )
 
@@ -132,6 +134,7 @@ def safe_stem(path: Path) -> str:
 # ---------------------------------------------------------------------------
 # Core processing
 # ---------------------------------------------------------------------------
+
 
 def process_image(
     img_path: Path,
@@ -167,8 +170,10 @@ def process_image(
     }
 
     # Load and resize
-    img = Image.open(img_path).convert("RGB").resize(
-        (drifter.diff_interface.width, drifter.diff_interface.height)
+    img = (
+        Image.open(img_path)
+        .convert("RGB")
+        .resize((drifter.diff_interface.width, drifter.diff_interface.height))
     )
 
     base_path = output_dir / f"{stem}_base.png"
@@ -180,7 +185,7 @@ def process_image(
 
     # Concept x delta sweep
     for concept in concepts:
-        cname    = concept["name"]
+        cname = concept["name"]
         pos_text = concept["positive"]
         neg_text = concept["negative"]
 
@@ -201,7 +206,9 @@ def process_image(
             try:
                 print(f"  [Perturb] concept='{cname}'  delta={delta} ...")
                 base_img, perturbed_img = drifter.perturbImagePoints(
-                    img, z_pos, z_neg,
+                    img,
+                    z_pos,
+                    z_neg,
                     delta=delta,
                     num_inference_steps=num_inference_steps,
                     guidance_scale=guidance_scale,
@@ -252,10 +259,10 @@ def process_entry(
     Process one config entry (one input_dir with its own concept pairs).
     Returns a summary dict for this entry.
     """
-    input_dir   = Path(entry["input_dir"])
+    input_dir = Path(entry["input_dir"])
     output_name = entry["output_name"]
-    concepts    = entry["concepts"]
-    output_dir  = root_output_dir / output_name
+    concepts = entry["concepts"]
+    output_dir = root_output_dir / output_name
 
     print(f"\n{'='*60}")
     print(f"Input  : {input_dir}")
@@ -264,15 +271,15 @@ def process_entry(
     print(f"{'='*60}")
 
     entry_summary = {
-        "input_dir":        str(input_dir),
-        "output_name":      output_name,
-        "concepts":         concepts,
-        "total_available":  0,
-        "processed":        0,
-        "succeeded":        0,
-        "skipped":          0,
-        "results":          [],
-        "skipped_details":  [],
+        "input_dir": str(input_dir),
+        "output_name": output_name,
+        "concepts": concepts,
+        "total_available": 0,
+        "processed": 0,
+        "succeeded": 0,
+        "skipped": 0,
+        "results": [],
+        "skipped_details": [],
     }
 
     if not input_dir.is_dir():
@@ -297,8 +304,10 @@ def process_entry(
 
     if max_images is not None and max_images < total_available:
         images = images[:max_images]
-        print(f"Found {total_available} image(s); randomly selected {len(images)} "
-              f"(--max_images={max_images}, seed={seed}).")
+        print(
+            f"Found {total_available} image(s); randomly selected {len(images)} "
+            f"(--max_images={max_images}, seed={seed})."
+        )
     else:
         print(f"Found {total_available} image(s) (processing all).")
 
@@ -329,9 +338,9 @@ def process_entry(
             traceback.print_exc()
             skipped.append({"image": img_path.name, "error": msg})
 
-    entry_summary["succeeded"]       = len(results)
-    entry_summary["skipped"]         = len(skipped)
-    entry_summary["results"]         = results
+    entry_summary["succeeded"] = len(results)
+    entry_summary["skipped"] = len(skipped)
+    entry_summary["results"] = results
     entry_summary["skipped_details"] = skipped
 
     return entry_summary
@@ -341,55 +350,80 @@ def process_entry(
 # CLI
 # ---------------------------------------------------------------------------
 
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Batch concept perturbation across multiple input folders."
     )
     parser.add_argument(
-        "--output_dir", required=True,
-        help="Root output folder. Each input_dir gets its own sub-folder here."
+        "--output_dir",
+        required=True,
+        help="Root output folder. Each input_dir gets its own sub-folder here.",
     )
     parser.add_argument(
-        "--config", required=True,
-        help="Path to concepts.json mapping input_dirs to their concept pairs."
+        "--config",
+        required=True,
+        help="Path to concepts.json mapping input_dirs to their concept pairs.",
     )
     parser.add_argument(
-        "--deltas", nargs="+", type=float, default=[0.1, 0.2, 0.5, 1.0],
-        help="List of delta perturbation strengths (default: 0.1 0.2 0.5 1.0)."
+        "--deltas",
+        nargs="+",
+        type=float,
+        default=[0.1, 0.2, 0.5, 1.0],
+        help="List of delta perturbation strengths (default: 0.1 0.2 0.5 1.0).",
     )
-    parser.add_argument("--seed",   type=int,   default=42)
-    parser.add_argument("--height", type=int,   default=512)
-    parser.add_argument("--width",  type=int,   default=512)
-    parser.add_argument("--guidance_scale",      type=float, default=8.0,
-        help="Guidance scale for the CLIP (non-DDIM) path (default: 8.0).")
-    parser.add_argument("--ddim_guidance_scale", type=float, default=32.0,
-        help="Guidance scale for the DDIM reconstruction path (default: 32.0).")
-    parser.add_argument("--num_inference_steps", type=int,   default=40)
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--height", type=int, default=512)
+    parser.add_argument("--width", type=int, default=512)
     parser.add_argument(
-        "--max_images", type=int, default=None,
+        "--guidance_scale",
+        type=float,
+        default=8.0,
+        help="Guidance scale for the CLIP (non-DDIM) path (default: 8.0).",
+    )
+    parser.add_argument(
+        "--ddim_guidance_scale",
+        type=float,
+        default=32.0,
+        help="Guidance scale for the DDIM reconstruction path (default: 32.0).",
+    )
+    parser.add_argument("--num_inference_steps", type=int, default=40)
+    parser.add_argument(
+        "--max_images",
+        type=int,
+        default=None,
         help="Max images to process per input_dir (random shuffle before cap). "
-             "Omit to process all images."
+        "Omit to process all images.",
     )
     parser.add_argument(
-        "--use_ddim", action="store_true",
-        help="Replace the default scheduler with DDIMScheduler."
+        "--use_ddim",
+        action="store_true",
+        help="Replace the default scheduler with DDIMScheduler.",
     )
     parser.add_argument(
-        "--ddim_eta", type=float, default=0.0,
-        help="Eta for DDIM (0.0 = deterministic). Only used with --use_ddim."
+        "--ddim_eta",
+        type=float,
+        default=0.0,
+        help="Eta for DDIM (0.0 = deterministic). Only used with --use_ddim.",
     )
     parser.add_argument(
-        "--dtype", choices=["float16", "float32"], default="float16",
+        "--dtype",
+        choices=["float16", "float32"],
+        default="float16",
     )
     parser.add_argument(
-        "--model_id", default="diffusers/stable-diffusion-2-1-unclip-i2i-l",
+        "--model_id",
+        default="diffusers/stable-diffusion-2-1-unclip-i2i-l",
     )
     parser.add_argument(
-        "--clip_model", default="openai/clip-vit-large-patch14",
+        "--clip_model",
+        default="openai/clip-vit-large-patch14",
     )
     parser.add_argument(
-        "--vae_scaling_factor", type=float, default=0.35,
-        help="VAE scaling factor override applied when --use_ddim is set (default: 0.35)."
+        "--vae_scaling_factor",
+        type=float,
+        default=0.35,
+        help="VAE scaling factor override applied when --use_ddim is set (default: 0.35).",
     )
     return parser.parse_args()
 
@@ -398,11 +432,12 @@ def parse_args():
 # Entry point
 # ---------------------------------------------------------------------------
 
+
 def main():
     args = parse_args()
 
     root_output_dir = Path(args.output_dir)
-    config_path     = Path(args.config)
+    config_path = Path(args.config)
 
     if not config_path.is_file():
         sys.exit(f"[ERROR] Config file not found: {config_path}")
@@ -434,7 +469,7 @@ def main():
     print("ConceptDrifter ready.")
 
     # Process each entry
-    run_start     = datetime.now().isoformat()
+    run_start = datetime.now().isoformat()
     entry_summaries = []
 
     for entry in entries:
@@ -454,33 +489,33 @@ def main():
 
     # Save run_summary.json
     total_succeeded = sum(e["succeeded"] for e in entry_summaries)
-    total_skipped   = sum(e["skipped"]   for e in entry_summaries)
+    total_skipped = sum(e["skipped"] for e in entry_summaries)
 
     summary = {
         "run_start": run_start,
-        "run_end":   datetime.now().isoformat(),
+        "run_end": datetime.now().isoformat(),
         "settings": {
-            "output_dir":           str(root_output_dir),
-            "config":               str(config_path),
-            "deltas":               args.deltas,
-            "seed":                 args.seed,
-            "max_images":           args.max_images,
-            "height":               args.height,
-            "width":                args.width,
-            "num_inference_steps":  args.num_inference_steps,
-            "guidance_scale":       args.guidance_scale,
-            "ddim_guidance_scale":  args.ddim_guidance_scale,
-            "use_ddim":             args.use_ddim,
-            "ddim_eta":             args.ddim_eta,
-            "vae_scaling_factor":   args.vae_scaling_factor,
-            "dtype":                args.dtype,
-            "model_id":             args.model_id,
-            "clip_model":           args.clip_model,
+            "output_dir": str(root_output_dir),
+            "config": str(config_path),
+            "deltas": args.deltas,
+            "seed": args.seed,
+            "max_images": args.max_images,
+            "height": args.height,
+            "width": args.width,
+            "num_inference_steps": args.num_inference_steps,
+            "guidance_scale": args.guidance_scale,
+            "ddim_guidance_scale": args.ddim_guidance_scale,
+            "use_ddim": args.use_ddim,
+            "ddim_eta": args.ddim_eta,
+            "vae_scaling_factor": args.vae_scaling_factor,
+            "dtype": args.dtype,
+            "model_id": args.model_id,
+            "clip_model": args.clip_model,
         },
-        "total_folders":    len(entries),
-        "total_succeeded":  total_succeeded,
-        "total_skipped":    total_skipped,
-        "entries":          entry_summaries,
+        "total_folders": len(entries),
+        "total_succeeded": total_succeeded,
+        "total_skipped": total_skipped,
+        "entries": entry_summaries,
     }
 
     summary_path = root_output_dir / "run_summary.json"
