@@ -70,10 +70,34 @@ class CLIPInterface:
         clip_model="openai/clip-vit-large-patch14",
         dtype=torch.float16,
         device="cuda" if torch.cuda.is_available() else "cpu",
+        use_un2clip: bool = False,
+        un2clip_ckpt_path: str | None = None,
     ):
+        """
+        Parameters
+        ----------
+        clip_model       : HuggingFace model ID for the base CLIP model.
+        dtype            : Model dtype.
+        device           : Compute device.
+        use_un2clip      : If True, patch the visual encoder with the un2CLIP
+                           fine-tuned weights after loading the base CLIP model.
+                           The text encoder is always kept as standard CLIP,
+                           since un2CLIP only fine-tunes the visual encoder.
+        un2clip_ckpt_path: Path to the un2CLIP .ckpt file (e.g.
+                           './pretrained_models/openai_vit_l_14_224.ckpt').
+                           Required when use_un2clip=True.
+        """
         self.dtype = dtype
         self.device = device
         self.clip_model = clip_model
+        self.use_un2clip = use_un2clip
+        self.un2clip_ckpt_path = un2clip_ckpt_path
+
+        if use_un2clip and un2clip_ckpt_path is None:
+            raise ValueError(
+                "un2clip_ckpt_path must be provided when use_un2clip=True."
+            )
+
         self.initCLIP()
 
     def initCLIP(self):
@@ -91,6 +115,54 @@ class CLIPInterface:
             .eval()
         )
 
+        # Patch the visual encoder with un2CLIP fine-tuned weights if requested.
+        # un2CLIP only fine-tunes the vision transformer, so the text encoder
+        # above is intentionally left as standard CLIP.
+        if self.use_un2clip:
+            self._load_un2clip_weights()
+
+    def _load_un2clip_weights(self):
+        """
+        Load the un2CLIP checkpoint and patch the visual encoder's weights.
+
+        The checkpoint stores only the visual encoder state_dict, matching the
+        interface used in the official un2CLIP eval script (eval_mmvpvlm.py):
+            state_dict = torch.load(ckpt_path, map_location='cpu', weights_only=True)
+            model.visual.load_state_dict(state_dict)
+
+        CLIPVisionModelWithProjection wraps the vision transformer, so we load
+        into its full state_dict via strict=False to accommodate any projection
+        head differences, and fall back to the visual_model sub-module if needed.
+        """
+        print(f"[CLIPInterface] Loading un2CLIP weights from: {self.un2clip_ckpt_path}")
+        state_dict = torch.load(
+            self.un2clip_ckpt_path, map_location="cpu", weights_only=True
+        )
+
+        # Try loading directly into CLIPVisionModelWithProjection
+        missing, unexpected = self.clip_image_encoder.load_state_dict(
+            state_dict, strict=False
+        )
+
+        # If most keys are missing it means the ckpt uses the inner visual model
+        # namespace — retry on the vision_model sub-module
+        if len(missing) > len(state_dict) * 0.5:
+            vm = getattr(self.clip_image_encoder, "vision_model", None)
+            if vm is not None:
+                missing, unexpected = vm.load_state_dict(state_dict, strict=False)
+
+        if unexpected:
+            print(
+                f"[CLIPInterface] un2CLIP: {len(unexpected)} unexpected keys (ignored)."
+            )
+        if missing:
+            print(
+                f"[CLIPInterface] un2CLIP: {len(missing)} missing keys (kept from base CLIP)."
+            )
+
+        self.clip_image_encoder.eval()
+        print("[CLIPInterface] un2CLIP visual encoder loaded successfully.")
+
     def getImgEmbedding(self, img: Image):
         # CLIP processor is usually callable; wrap defensively
         clip_inputs = self.clip_processor(images=img, return_tensors="pt").to(
@@ -106,6 +178,8 @@ class CLIPInterface:
         return z_i
 
     def getTextEmbedding(self, text: Union[list[str], str]):
+        # Text encoder is always standard CLIP regardless of use_un2clip,
+        # since un2CLIP only fine-tunes the visual encoder.
         toks = self.tokenizer(text, return_tensors="pt", padding=True).to(self.device)
         with torch.no_grad():
             out = self.text_encoder(**toks)
@@ -384,15 +458,29 @@ class ConceptDrifter:
         use_ddim: bool = False,
         ddim_eta: float = 0.0,
         vae_scaling_factor: float = 0.35,
+        use_un2clip: bool = False,
+        un2clip_ckpt_path: str | None = None,
     ):
         """
-        vae_scaling_factor : only applied when use_ddim=True.
-                             Overrides pipe.vae.config.scaling_factor after the
-                             pipeline is loaded.  Has no effect when use_ddim=False
-                             (the pipeline's own default is used instead).
+        Parameters
+        ----------
+        vae_scaling_factor  : Only applied when use_ddim=True. Overrides
+                              pipe.vae.config.scaling_factor after pipeline load.
+        use_un2clip         : If True, patch the CLIP visual encoder with
+                              un2CLIP fine-tuned weights. The text encoder is
+                              always kept as standard CLIP.
+        un2clip_ckpt_path   : Path to the un2CLIP .ckpt file. Required when
+                              use_un2clip=True (e.g.
+                              './pretrained_models/openai_vit_l_14_224.ckpt').
         """
         self.device = device
-        self.clip_interface = CLIPInterface(clip_model, dtype, device)
+        self.clip_interface = CLIPInterface(
+            clip_model,
+            dtype,
+            device,
+            use_un2clip=use_un2clip,
+            un2clip_ckpt_path=un2clip_ckpt_path,
+        )
         self.diff_interface = DiffusionInterface(
             model_id,
             dtype,
@@ -586,7 +674,7 @@ if __name__ == "__main__":
 
     # ── DDIM path (structure-preserving, concept-shifted) ────────────────────
     print("Running DDIM perturbation path ...")
-    c_ddim = ConceptDrifter(use_ddim=True, vae_scaling_factor=0.35)
+    c_ddim = ConceptDrifter(use_ddim=True, vae_scaling_factor=0.25)
     embeddings = c_ddim.clip_interface.getTextEmbedding([text_positive, text_negative])
     z_pos = embeddings[0:1]
     z_neg = embeddings[1:2]
@@ -604,3 +692,31 @@ if __name__ == "__main__":
     base_ddim.save("outputs/ddim_base.png")
     perturbed_ddim.save("outputs/ddim_perturbed_2.png")
     print("  Saved: outputs/ddim_base.png, outputs/ddim_perturbed_2.png")
+
+    # ── DDIM + un2CLIP path (detail-aware, structure-preserving) ─────────────
+    print("Running DDIM + un2CLIP perturbation path ...")
+    c_un2clip = ConceptDrifter(
+        use_ddim=True,
+        vae_scaling_factor=0.25,
+        use_un2clip=True,
+        un2clip_ckpt_path="./pretrained_models/openai_vit_l_14_224.ckpt",
+    )
+    embeddings = c_un2clip.clip_interface.getTextEmbedding(
+        [text_positive, text_negative]
+    )
+    z_pos = embeddings[0:1]
+    z_neg = embeddings[1:2]
+
+    base_un2clip, perturbed_un2clip = c_un2clip.perturbImagePoints(
+        image,
+        z_pos,
+        z_neg,
+        delta=0.5,
+        use_ddim=True,
+        num_inference_steps=40,
+        ddim_guidance_scale=32.0,
+        ddim_eta=0.0,
+    )
+    base_un2clip.save("outputs/un2clip_base.png")
+    perturbed_un2clip.save("outputs/un2clip_perturbed.png")
+    print("  Saved: outputs/un2clip_base.png, outputs/un2clip_perturbed.png")

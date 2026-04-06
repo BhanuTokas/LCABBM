@@ -61,6 +61,8 @@ python batch_concept_perturb.py \\
     [--ddim_guidance_scale 32.0] \\
     [--ddim_eta 0.0] \\
     [--vae_scaling_factor 0.35] \\
+    [--use_un2clip] \\
+    [--un2clip_ckpt_path ./pretrained_models/openai_vit_l_14_224.ckpt] \\
     [--dtype float16] \\
     [--model_id diffusers/stable-diffusion-2-1-unclip-i2i-l] \\
     [--clip_model openai/clip-vit-large-patch14]
@@ -425,6 +427,20 @@ def parse_args():
         default=0.35,
         help="VAE scaling factor override applied when --use_ddim is set (default: 0.35).",
     )
+    parser.add_argument(
+        "--use_un2clip",
+        action="store_true",
+        help="Patch the CLIP visual encoder with un2CLIP fine-tuned weights. "
+        "Requires --un2clip_ckpt_path. Text encoder remains standard CLIP.",
+    )
+    parser.add_argument(
+        "--un2clip_ckpt_path",
+        type=str,
+        default=None,
+        help="Path to the un2CLIP checkpoint file "
+        "(e.g. ./pretrained_models/openai_vit_l_14_224.ckpt). "
+        "Required when --use_un2clip is set.",
+    )
     return parser.parse_args()
 
 
@@ -453,8 +469,16 @@ def main():
     if args.max_images:
         print(f"  Max images  : {args.max_images} per folder (seed={args.seed})")
 
+    # Validate un2clip args early
+    if args.use_un2clip and not args.un2clip_ckpt_path:
+        sys.exit("[ERROR] --un2clip_ckpt_path is required when --use_un2clip is set.")
+    if args.use_un2clip and not Path(args.un2clip_ckpt_path).is_file():
+        sys.exit(f"[ERROR] un2CLIP checkpoint not found: {args.un2clip_ckpt_path}")
+
     # Initialise ConceptDrifter once (shared across all entries)
     print("\nInitialising ConceptDrifter (loading models — this may take a moment) ...")
+    if args.use_un2clip:
+        print(f"  un2CLIP visual encoder will be loaded from: {args.un2clip_ckpt_path}")
     drifter = ConceptDrifter(
         model_id=args.model_id,
         clip_model=args.clip_model,
@@ -465,6 +489,8 @@ def main():
         use_ddim=args.use_ddim,
         ddim_eta=args.ddim_eta,
         vae_scaling_factor=args.vae_scaling_factor,
+        use_un2clip=args.use_un2clip,
+        un2clip_ckpt_path=args.un2clip_ckpt_path,
     )
     print("ConceptDrifter ready.")
 
@@ -508,6 +534,8 @@ def main():
             "use_ddim": args.use_ddim,
             "ddim_eta": args.ddim_eta,
             "vae_scaling_factor": args.vae_scaling_factor,
+            "use_un2clip": args.use_un2clip,
+            "un2clip_ckpt_path": args.un2clip_ckpt_path,
             "dtype": args.dtype,
             "model_id": args.model_id,
             "clip_model": args.clip_model,

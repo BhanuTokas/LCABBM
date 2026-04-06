@@ -214,3 +214,4 @@ models/
 outputs/
 samples/
 .vscode/
+CCBM/pretrained_models/
